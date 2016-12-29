@@ -13,6 +13,28 @@ GOVERSION := 1.7
 GP := /gopath
 MAIN_PKG := github.com/atlassian/smith/cmd/smith
 
+setup-minikube-ci:
+# Install libvirt and qemu-kvm on your system, e.g.
+	sudo apt-get update -qq
+	sudo apt-get install -qq libvirt-bin qemu-kvm
+# Add yourself to the libvirtd group (may vary by linux distro) so you don't need to sudo
+	sudo usermod -a -G libvirtd $$USER
+
+	curl -L https://github.com/docker/machine/releases/download/v0.8.2/docker-machine-$$(uname -s)-$$(uname -m) -o docker-machine
+	chmod +x docker-machine
+	sudo mv docker-machine /usr/local/bin/docker-machine
+
+	curl -L https://github.com/dhiltgen/docker-machine-kvm/releases/download/v0.7.0/docker-machine-driver-kvm -o docker-machine-driver-kvm
+	chmod +x docker-machine-driver-kvm
+	sudo mv docker-machine-driver-kvm /usr/local/bin/docker-machine-driver-kvm
+
+	docker-machine version
+
+	curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+	chmod +x minikube
+	./minikube version
+	./minikube config set WantReportErrorPrompt false
+
 setup-ci:
 	go get -u github.com/Masterminds/glide
 	go get -u golang.org/x/tools/cmd/goimports

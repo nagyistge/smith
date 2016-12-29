@@ -1,0 +1,25 @@
+sudo: required
+dist: trusty
+
+language: go
+
+services:
+  - docker
+
+go:
+  - 1.7
+
+os:
+  - linux
+
+before_install:
+  - make setup-minikube-ci
+  - sudo -E su $USER -c "env PATH=$PATH ./minikube start --show-libmachine-logs --vm-driver=kvm"
+
+install:
+  - make setup-ci
+
+script:
+  - make build-all
+# Update current session for the group change to take effect
+  - sudo -E su $USER -c "env PATH=$PATH make minikube-test"
