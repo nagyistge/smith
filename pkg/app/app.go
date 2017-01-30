@@ -89,6 +89,7 @@ func (a *App) ensureResourceExists(ctx context.Context, clientset kubernetes.Int
 	res, err := clientset.ExtensionsV1beta1().ThirdPartyResources().Create(&extensions.ThirdPartyResource{
 		ObjectMeta: apiv1.ObjectMeta{
 			Name: smith.TemplateResourceName,
+			Finalizers:[]string{smith.Finalizer},
 		},
 		Description: "Smith resource manager",
 		Versions: []extensions.APIVersion{
