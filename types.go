@@ -32,6 +32,7 @@ const (
 	TemplateResourceGroupVersion = SmithResourceGroup + "/" + TemplateResourceVersion
 
 	TemplateNameLabel = TemplateResourceName + "/templateName"
+	Finalizer = SmithDomain + "/cleanup"
 )
 
 type TemplateList struct {

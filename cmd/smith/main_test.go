@@ -45,6 +45,7 @@ func TestWorkflow(t *testing.T) {
 		},
 		Metadata: apiv1.ObjectMeta{
 			Name: templateName,
+			Finalizers:[]string{smith.Finalizer},
 		},
 		Spec: smith.TemplateSpec{
 			Resources: tmplResources(r),
@@ -114,7 +115,7 @@ func TestWorkflow(t *testing.T) {
 		Do().
 		Error())
 
-	templateCreated = true
+	//templateCreated = true
 
 	for _, resource := range tmpl.Spec.Resources {
 		func() {
