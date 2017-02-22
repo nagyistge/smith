@@ -26,6 +26,7 @@ func (h *templateEventHandler) OnDelete(obj interface{}) {
 }
 
 func (h *templateEventHandler) handle(obj interface{}) {
+	log.Printf("[TEH] %#v", obj)
 	in := obj.(*smith.Template)
 	out := &smith.Template{}
 

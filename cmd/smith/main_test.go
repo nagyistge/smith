@@ -147,12 +147,20 @@ func TestWorkflow(t *testing.T) {
 						continue
 					}
 					t.Logf("received event for resource %q of kind %q", resource.Spec.GetName(), resource.Spec.GetKind())
-					a.EqualValues(map[string]string{
+					a.Equal(map[string]string{
 						"configLabel":           "configValue",
 						"templateLabel":         "templateValue",
 						"overlappingLabel":      "overlappingConfigValue",
 						smith.TemplateNameLabel: templateName,
 					}, obj.GetLabels())
+					a.Equal([]metav1.OwnerReference{
+						{
+							APIVersion: smith.TemplateResourceVersion,
+							Kind:       smith.TemplateResourceKind,
+							Name:       templateName,
+							UID:        tmpl.Metadata.UID,
+						},
+					}, obj.GetOwnerReferences())
 					return
 				}
 			}
@@ -166,7 +174,7 @@ func TestWorkflow(t *testing.T) {
 		Name(templateName).
 		Do().
 		Into(&tmplRes))
-	r.Equal(smith.READY, tmplRes.Status.State, tmplRes)
+	r.Equal(smith.READY, tmplRes.Status.State, "bla = %#v", tmplRes)
 }
 
 func tmplResources(r *require.Assertions) []smith.Resource {

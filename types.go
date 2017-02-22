@@ -2,6 +2,7 @@ package smith
 
 import (
 	"encoding/json"
+	"log"
 
 	"k8s.io/client-go/pkg/api/meta"
 	apiv1 "k8s.io/client-go/pkg/api/v1"
@@ -109,23 +110,25 @@ type templateListCopy TemplateList
 type templateCopy Template
 
 func (e *Template) UnmarshalJSON(data []byte) error {
+	log.Printf("template:\n%s", data)
 	tmp := templateCopy{}
 	err := json.Unmarshal(data, &tmp)
 	if err != nil {
 		return err
 	}
-	tmp2 := Template(tmp)
-	*e = tmp2
+	*e = Template(tmp)
+	log.Printf("deserialized:\n%#v", *e)
 	return nil
 }
 
 func (el *TemplateList) UnmarshalJSON(data []byte) error {
+	log.Printf("templateList:\n%s", data)
 	tmp := templateListCopy{}
 	err := json.Unmarshal(data, &tmp)
 	if err != nil {
 		return err
 	}
-	tmp2 := TemplateList(tmp)
-	*el = tmp2
+	*el = TemplateList(tmp)
+	log.Printf("deserializedList:\n%#v", *el)
 	return nil
 }
